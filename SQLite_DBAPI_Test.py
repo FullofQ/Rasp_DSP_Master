@@ -3,31 +3,61 @@
 import sqlite3
 import time
 
-conn = sqlite3.connect('Test.db')
+def update_task(conn,task):
+    
+    sql = 'UPDATE Test SET SLAVE = ?,PROGRAM = ? WHERE ID = ?'
+    
+    cur = conn.cursor()
+    cur.execute(sql, task)
+
+def create_connection(Monitor):
+    
+    try:
+        conn = sqlite3.connect('Monitor.db')
+        return conn
+    except Error as e:
+        print(e)
+    return None
+
+def main():
+    database = "/home/pi/Desktop/Rasp_DSP_Master/Monitor.db"
+    
+    conn = create_connection(database)
+    with conn:
+        update_task(conn, ('0a','99',1))
+        
+    #display table
+    cur = conn.cursor()
+    for row in cur.execute('SELECT * FROM Test'):
+        print row
+        time.sleep(1)
+    
+    conn.close()
+    
+    
+main()
+
+'''
+conn = sqlite3.connect('Monitor.db')
 
 print "Opened database successfully";
 
 c = conn.cursor()
-'''
-name = 'Eating'
-c.execute("SELECT * FROM COMANY WHERE NAME= '%s' " % name);
-'''
 
-t = ('Paul',)
-c.execute('SELECT * FROM COMANY WHERE NAME=?', t)
-print c.fetchone
+data = [(10,'0a','01'),
+        (11,'0a','02'),
+        (12,'0a','03')]
 
-data = [(2,'Eating',21,'Taiwan',50000),
-        (3,'Yi-Ting',15,'UK',100000),
-        (4,'QQ',56,'USA',20000)]
+a_data = [(1,'0a','01')]
 
-c.executemany('INSERT INTO COMANY VALUES(?,?,?,?,?)', data)
+c.executemany('INSERT INTO Test VALUES(?,?,?)', data)
 
 conn.commit()
 print "Records created successfully";
 
-for row in c.execute('SELECT * FROM COMANY'):
+for row in c.execute('SELECT * FROM Test'):
     print row
     time.sleep(1)
     
 conn.close()
+'''

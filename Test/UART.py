@@ -17,12 +17,15 @@ counter = 0
  
 while 1:
     x = ser.read(2)
-    #str_x = __builtins__.str(x)
     x_hex = x.encode("hex")
-    print x_hex
-    #int_x = __builtins__.int(str_x)
+    Slave = x_hex[0:2]
+    Program = x_hex[2:5]
+    print Slave
+    print Program
     time.sleep(1)
+    '''
     if x_hex == '':
         print('Nothing')
     else:
         print('Got it')
+    '''
