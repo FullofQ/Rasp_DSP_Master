@@ -2,18 +2,18 @@
 
 import sqlite3
 import time
+import serial
 
 def update_task(conn,task):
-    
-    sql = 'UPDATE Test SET SLAVE = ?,PROGRAM = ? WHERE ID = ?'
-    
+    sql = 'UPDATE Master_A SET SLAVE = ?,PROGRAM = ? WHERE ID = ?'
     cur = conn.cursor()
     cur.execute(sql, task)
 
-def create_connection(Monitor):
+
+def create_connection(target_database):
     
     try:
-        conn = sqlite3.connect('Monitor.db')
+        conn = sqlite3.connect(target_database)
         return conn
     except Error as e:
         print(e)
@@ -21,43 +21,39 @@ def create_connection(Monitor):
 
 def main():
     database = "/home/pi/Desktop/Rasp_DSP_Master/Monitor.db"
-    
     conn = create_connection(database)
+    
+    #serial_task
+    ser = serial.Serial(
+        port='/dev/serial0',
+        baudrate = 115200,
+        parity = serial.PARITY_NONE,
+	stopbits = serial.STOPBITS_ONE,
+	bytesize = serial.EIGHTBITS,
+	timeout = 1
+	)
+    
+    #serial
+    x = ser.read(2)
+    x_hex = x.encode("hex")
+    Slave = x_hex[0:2]
+    Program = x_hex[2:5]
+    time.sleep(1)
+    
+    #update_task
     with conn:
-        update_task(conn, ('0a','99',1))
-        
-    #display table
+        update_task(conn, (Slave,Program,1))
+    
+    #display
     cur = conn.cursor()
-    for row in cur.execute('SELECT * FROM Test'):
+    for row in cur.execute('SELECT * FROM Master_A'):
         print row
         time.sleep(1)
     
-    conn.close()
+while 1:
+    main()
+
     
     
-main()
+  
 
-'''
-conn = sqlite3.connect('Monitor.db')
-
-print "Opened database successfully";
-
-c = conn.cursor()
-
-data = [(10,'0a','01'),
-        (11,'0a','02'),
-        (12,'0a','03')]
-
-a_data = [(1,'0a','01')]
-
-c.executemany('INSERT INTO Test VALUES(?,?,?)', data)
-
-conn.commit()
-print "Records created successfully";
-
-for row in c.execute('SELECT * FROM Test'):
-    print row
-    time.sleep(1)
-    
-conn.close()
-'''
