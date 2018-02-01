@@ -41,7 +41,7 @@ def main():
     x_hex = x.encode("hex")
     Slave = x_hex[0:2]
     Program = x_hex[2:5]
-    time.sleep(1)
+    #time.sleep(1)
     
     #update_task
     with conn:
@@ -50,16 +50,18 @@ def main():
     
     #JSON
     post_data = {'ID':'1','SLAVE':Slave,'PROGRAM':Program}
-    ret = urllib2.urlopen(url='120.119.72.53:8080', data=json.dumps(post_data))
-    print "JSON is done"
+    ret = urllib2.urlopen(url='http://120.119.72.53:8080/index.php', data=json.dumps(post_data))
+    #print "JSON is done"
     print ret.read()
+    time.sleep(1)
     
     #display
+    '''
     cur = conn.cursor()
     for row in cur.execute('SELECT * FROM Master_A'):
         print row
         time.sleep(1)
-    
+    '''
 while 1:
     main()
 
