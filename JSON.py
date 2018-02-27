@@ -22,10 +22,11 @@ def create_connection(target_database):
     return None
 
 def main():
+    '''
     database = "/home/pi/Desktop/Rasp_DSP_Master/Monitor.db"
     conn = create_connection(database)
     print "connection successfully"
-    
+    '''
     #serial_task
     ser = serial.Serial(
         port='/dev/serial0',
@@ -42,15 +43,15 @@ def main():
     Slave = x_hex[0:2]
     Program = x_hex[2:5]
     #time.sleep(1)
-    
+    '''
     #update_task
     with conn:
         update_task(conn, (Slave,Program,1))
         print "update successfully"
-    
+    '''
     #JSON
     post_data = {'ID':'1','SLAVE':Slave,'PROGRAM':Program}
-    ret = urllib2.urlopen(url='http://120.119.72.53:8080/index.php', data=json.dumps(post_data))
+    ret = urllib2.urlopen(url='http://120.119.72.53:8080/json.php', data=json.dumps(post_data))
     #print "JSON is done"
     print ret.read()
     time.sleep(1)
