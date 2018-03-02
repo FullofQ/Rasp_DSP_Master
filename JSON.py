@@ -50,8 +50,8 @@ def main():
         print "update successfully"
     '''
     #JSON
-    post_data = {'ID':'1','SLAVE':Slave,'PROGRAM':Program}
-    ret = urllib2.urlopen(url='http://120.119.72.53:8080/json.php', data=json.dumps(post_data))
+    post_data = {'SLAVE':Slave,'PROGRAM':Program}
+    ret = urllib2.urlopen(url='http://120.119.72.53:8080/monitor_slave.php', data=json.dumps(post_data))
     #print "JSON is done"
     print ret.read()
     time.sleep(1)
