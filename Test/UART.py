@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python2.7
 
 __builtins__
 
@@ -16,12 +16,14 @@ ser = serial.Serial(
 counter = 0
  
 while 1:
-    x = ser.read(2)
+    x = ser.read(100)
     x_hex = x.encode("hex")
     Slave = x_hex[0:2]
-    Program = x_hex[2:5]
+    Program = x_hex[2:4]
+    Delay = x_hex[4:6]
     print Slave
     print Program
+    print Delay
     time.sleep(1)
     '''
     if x_hex == '':

@@ -38,10 +38,12 @@ def main():
 	)
     
     #serial
-    x = ser.read(2)
+    x = ser.read(100)
     x_hex = x.encode("hex")
     Slave = x_hex[0:2]
-    Program = x_hex[2:5]
+    Program = x_hex[2:4]
+    Delay = x_hex[4:6]
+    #print Delay
     #time.sleep(1)
     '''
     #update_task
@@ -50,7 +52,7 @@ def main():
         print "update successfully"
     '''
     #JSON
-    post_data = {'SLAVE':Slave,'PROGRAM':Program}
+    post_data = {'SLAVE':Slave,'PROGRAM':Program,'DELAY':Delay}
     ret = urllib2.urlopen(url='http://120.119.72.53:8080/monitor_slave.php', data=json.dumps(post_data))
     #print "JSON is done"
     print ret.read()
