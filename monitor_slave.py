@@ -4,6 +4,7 @@ import time
 import serial
 import urllib2  
 import json
+import traceback
 
 def main():
     
@@ -24,15 +25,42 @@ def main():
     Program = x_hex[2:4]
     Delay = x_hex[4:6]
     
-    #JSON
-    post_data = {'SLAVE':Slave,'PROGRAM':Program,'DELAY':Delay}
-    ret = urllib2.urlopen(url='http://120.119.72.53:8080/monitor_slave.php', data=json.dumps(post_data))
-    #print "JSON is done"
-    print ret.read()
-    time.sleep(1)
+    
+    null_a=''
+    if Slave == null_a:
+        
+        print "Fail"
+        #JSON
+        post_data = {'MONITOR':'0'}
+        ret = urllib2.urlopen(url='http://120.119.72.53:8080/monitor_slave.php', data=json.dumps(post_data))
+        #print "JSON is done"
+        print ret.read()
+        time.sleep(1)
+        
+    else:
+        null_b=''
+        if Slave == null_b:
+            print "Fail"
+            #JSON
+            post_data = {'MONITOR':'0'}
+            ret = urllib2.urlopen(url='http://120.119.72.53:8080/monitor_slave.php', data=json.dumps(post_data))
+            #print "JSON is done"
+            print ret.read()
+            time.sleep(1)
+        else:
+            #JSON
+            post_data = {'MONITOR':'1','SLAVE':Slave,'PROGRAM':Program,'DELAY':Delay}
+            ret = urllib2.urlopen(url='http://120.119.72.53:8080/monitor_slave.php', data=json.dumps(post_data))
+            #print "JSON is done"
+            print ret.read()
+            time.sleep(1) 
     
 while 1:
-    main()
+    try:
+        main()
+    except:
+        print('Unknown error') 
+        traceback.print_exc()
 
     
     
